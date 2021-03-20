@@ -1,0 +1,8 @@
+{
+  "item.hatash.silver_ingot": "Silver Ingot",
+  "item.hatash.energized_miner": "Energized Miner",
+  "block.hatash.silver_block": "Silver Block",
+  "block.hatash.silver_ore": "Silver Ore",
+
+  "item.hatash.tooltip.show_details": "press shift for more"
+}
