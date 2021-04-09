@@ -1,12 +1,13 @@
 package com.hawasman.hatash.capabilities;
 
+import com.hawasman.hatash.config.Configuration;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.energy.EnergyStorage;
 
 public class ModEnergyStorage extends EnergyStorage implements INBTSerializable<CompoundNBT> {
-    public ModEnergyStorage(int capacity, int maxTransfer) {
-        super(capacity, maxTransfer);
+    public ModEnergyStorage() {
+        super((int) Configuration.GENERAL_CONFIG.MAX_ENERGY,Integer.MAX_VALUE, Integer.MAX_VALUE);
     }
 
     protected void onEnergyChanged() {

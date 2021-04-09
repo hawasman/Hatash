@@ -15,5 +15,9 @@ public class ModBlockStateProvider extends BlockStateProvider {
     protected void registerStatesAndModels() {
         simpleBlock(ModBlocks.SILVER_ORE.get());
         simpleBlock(ModBlocks.SILVER_BLOCK.get());
+        horizontalBlock(ModBlocks.CARBON_GENERATOR.get()
+                , modLoc("block/carbon_generator_side")
+                , modLoc("block/carbon_generator")
+                , modLoc("block/carbon_generator_side"));
     }
 }

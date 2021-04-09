@@ -1,5 +1,6 @@
 package com.hawasman.hatash;
 
+import com.hawasman.hatash.setup.ClientSetup;
 import com.hawasman.hatash.setup.Registration;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -33,5 +34,7 @@ public class HatashMod
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
+
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::init);
     }
 }

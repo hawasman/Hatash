@@ -23,6 +23,8 @@ public class ModItemTagsProvider extends ItemTagsProvider {
         copy(ModTags.Blocks.STORAGE_BLOCK_SILVER,ModTags.Items.STORAGE_BLOCK_SILVER);
         copy(Tags.Blocks.STORAGE_BLOCKS, Tags.Items.STORAGE_BLOCKS);
 
+        copy(ModTags.Blocks.MACHINES_CARBON_GENERATOR, ModTags.Items.MACHINES_CARBON_GENERATOR);
+
         getOrCreateBuilder(ModTags.Items.INGOTS_SILVER).add(ModItems.SILVER_INGOT.get());
         getOrCreateBuilder(Tags.Items.INGOTS).addTag(ModTags.Items.INGOTS_SILVER);
         getOrCreateBuilder(ModTags.Items.ITEM_ENERGIZED_MINER).add(ModItems.ENERGIZED_MINER.get());

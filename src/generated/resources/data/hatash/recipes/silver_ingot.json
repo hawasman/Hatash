@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "hatash:silver_block"
+    }
+  ],
+  "result": {
+    "item": "hatash:silver_ingot",
+    "count": 9
+  }
+}

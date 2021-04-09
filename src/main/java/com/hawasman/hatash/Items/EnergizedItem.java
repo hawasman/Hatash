@@ -1,93 +1,53 @@
 package com.hawasman.hatash.Items;
 
-import com.hawasman.hatash.capabilities.ModCapabilityProvider;
-import com.hawasman.hatash.config.Configuration;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.energy.EnergyStorage;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.List;
+import java.util.Objects;
 
-public class EnergizedItem extends Item {
-    private int energyCapacity;
-    private float efficiency;
+public class EnergizedItem extends EnergyStorage {
+    private ItemStack stack;
 
-    public EnergizedItem() {
-        super(new Item.Properties().maxStackSize(1).setNoRepair().group(ItemGroup.TOOLS));
-        this.energyCapacity = (int) Configuration.GENERAL_CONFIG.MAX_ENERGY;
-        this.efficiency = Configuration.GENERAL_CONFIG.MINER_EFFICIENCY;
+    public EnergizedItem(ItemStack stack, int energyCapacity) {
+        super(getMaxCapacity(stack, energyCapacity), Integer.MAX_VALUE, Integer.MAX_VALUE);
+        this.stack = stack;
+        this.energy = stack.hasTag() && Objects.requireNonNull(stack.getTag()).contains("energy") ? stack.getTag().getInt("energy") : 0;
+    }
+
+    private static int getMaxCapacity(ItemStack stack, int capacity) {
+        if (!stack.hasTag() || !stack.getTag().contains("max_energy"))
+            return capacity;
+
+        return stack.getTag().getInt("max_energy");
+    }
+
+    public void updatedMaxEnergy(int max) {
+        stack.getOrCreateTag().putInt("max_energy", max);
+        this.capacity = max;
+
+        // Ensure the current stored energy is up to date with the new max.
+        this.receiveEnergy(1, false);
     }
 
     @Override
-    public int getMaxDamage(ItemStack stack) {
-        return this.energyCapacity;
+    public int extractEnergy(int maxExtract, boolean simulate) {
+        return 0;
     }
 
     @Override
-    public boolean showDurabilityBar(ItemStack stack) {
-        IEnergyStorage energyStorage = stack.getCapability(CapabilityEnergy.ENERGY, null).orElse(null);
-        return (energyStorage.getEnergyStored() < energyStorage.getMaxEnergyStored());
+    public int receiveEnergy(int maxReceive, boolean simulate) {
+        int stored = this.getEnergyStored() + maxReceive;
+        if (stored < 0) {
+            if (!simulate)
+                stack.getOrCreateTag().putInt("energy", 0);
+            return 0;
+        }
+
+        int amount = super.receiveEnergy(maxReceive, simulate);
+        if (!simulate)
+            stack.getOrCreateTag().putInt("energy", this.energy);
+
+        return amount;
     }
 
-    @OnlyIn(Dist.CLIENT)
-    @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        super.addInformation(stack, worldIn, tooltip, flagIn);
-    }
-
-    @Nullable
-    @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
-        return new ModCapabilityProvider(stack, (int) Configuration.GENERAL_CONFIG.MAX_ENERGY);
-    }
-
-    @Override
-    public double getDurabilityForDisplay(ItemStack stack) {
-        return stack.getCapability(CapabilityEnergy.ENERGY, null)
-                .map(e -> 1D - (e.getEnergyStored() / (double) e.getMaxEnergyStored()))
-                .orElse(0D);
-    }
-
-    @Override
-    public int getRGBDurabilityForDisplay(ItemStack stack) {
-        return stack.getCapability(CapabilityEnergy.ENERGY)
-                .map(e -> MathHelper.hsvToRGB(Math.max(0.0F, (float) e.getEnergyStored() / (float) e.getMaxEnergyStored()) / 3.0F, 1.0F, 1.0F))
-                .orElse(super.getRGBDurabilityForDisplay(stack));
-    }
-
-    @Override
-    public void fillItemGroup(@Nonnull ItemGroup group, @Nonnull NonNullList<ItemStack> items) {
-        super.fillItemGroup(group, items);
-        if (!isInGroup(group))
-            return;
-
-        ItemStack charged = new ItemStack(this);
-        charged.getOrCreateTag().putDouble("energy", Configuration.GENERAL_CONFIG.MAX_ENERGY);
-        items.add(charged);
-    }
-
-    @Override
-    public float getDestroySpeed(ItemStack stack, BlockState state) {
-        IEnergyStorage energyStorage = stack.getCapability(CapabilityEnergy.ENERGY).orElse(null);
-        return energyStorage.getEnergyStored() > 0 ? this.efficiency : 1;
-    }
-
-    @Override
-    public boolean canHarvestBlock(ItemStack stack, BlockState state) {
-        return true;
-    }
 }

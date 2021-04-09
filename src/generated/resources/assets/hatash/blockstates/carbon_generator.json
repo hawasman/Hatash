@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "hatash:block/carbon_generator"
+    },
+    "facing=south": {
+      "model": "hatash:block/carbon_generator",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "hatash:block/carbon_generator",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "hatash:block/carbon_generator",
+      "y": 90
+    }
+  }
+}

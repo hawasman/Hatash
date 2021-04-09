@@ -12,6 +12,7 @@ public class ModTags {
     public static final class Blocks{
         public static final ITag.INamedTag<Block> ORES_SILVER = forge("ores/silver");
         public static final ITag.INamedTag<Block> STORAGE_BLOCK_SILVER = forge("storage_blocks/silver");
+        public static ITag.INamedTag<Block> MACHINES_CARBON_GENERATOR = mod("machine/carbon_generator");
 
         private static ITag.INamedTag<Block> forge(String path){
             return BlockTags.makeWrapperTag(new ResourceLocation("forge", path).toString());
@@ -23,6 +24,7 @@ public class ModTags {
     public static final class Items{
         public static final ITag.INamedTag<Item> ORES_SILVER = forge("ores/silver");
         public static final ITag.INamedTag<Item> STORAGE_BLOCK_SILVER = forge("storage_blocks/silver");
+        public static ITag.INamedTag<Item> MACHINES_CARBON_GENERATOR = mod("machine/carbon_generator");
 
         public static final ITag.INamedTag<Item> INGOTS_SILVER = forge("ingots/silver");
         public static final ITag.INamedTag<Item> ITEM_ENERGIZED_MINER = mod("item/energized_miner");

@@ -21,7 +21,10 @@ public final class DataGenerator {
         generator.addProvider(new ModItemModelProvider(generator, fileHelper));
 
         ModBlockTagsProvider blockTagsProvider = new ModBlockTagsProvider(generator, fileHelper);
+
         generator.addProvider(blockTagsProvider);
         generator.addProvider(new ModItemTagsProvider(generator, blockTagsProvider, fileHelper));
+        generator.addProvider(new ModLootTableProvider(generator));
+        generator.addProvider(new ModRecipeProvider(generator));
     }
 }
